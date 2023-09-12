@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  web:
+    build:      
+      context: .  # Diretório onde está o seu Dockerfile      
+    ports:
+      - "80:80"  # Mapeia a porta 80 do contêiner para a porta 80 do host
+    volumes:
+      - ./:/var/www/html  # Mapeia o diretório do seu projeto para o diretório do Apache
+    restart: always  
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./.docker/mysql:/var/lib/mysql  # Adicione um volume para armazenar os dados do MySQL
+
+  xdebug:
+    build:
+      context: .  # Diretório onde está o seu Dockerfile
+    environment:
+      XDEBUG_CONFIG: "remote_host=host.docker.internal remote_port=9000"
+    ports:
+      - "9000:9000"  # Mapeia a porta 9000 do contêiner para a porta 9000 do host
+
+  redis:
+    image: redis:latest
+    restart: always
