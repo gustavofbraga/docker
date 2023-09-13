@@ -1,5 +1,5 @@
 # Use uma imagem base com PHP e Apache
-FROM php:8.0-apache
+FROM php:apache
 
 # Atualize a lista de pacotes e instale extensões do PHP e ferramentas conforme necessário
 RUN apt-get update && \
@@ -7,13 +7,13 @@ RUN apt-get update && \
         libpng-dev \
         libjpeg-dev \
         libfreetype6-dev \
-        libzip-dev \        
+        libzip-dev \
         libonig-dev \
         libxml2-dev \
         libssl-dev \
-        libcurl4-openssl-dev \                
+        libcurl4-openssl-dev \
         git \
-        nano \  
+        nano \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) xml gd zip pdo_mysql mysqli mbstring curl dom exif pcntl bcmath sockets
 

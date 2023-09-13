@@ -1,13 +1,13 @@
 version: '3.8'
 services:
   web:
-    build:      
-      context: .  # Diretório onde está o seu Dockerfile      
+    build:
+      context: .  # Diretório onde está o seu Dockerfile
     ports:
       - "8080:80"  # Mapeia a porta 80 do contêiner para a porta 8080 do host
     volumes:
       - ./:/var/www/html  # Mapeia o diretório do seu projeto para o diretório do Apache
-    restart: always  
+    restart: always
 
   mysql:
     image: mysql:latest
