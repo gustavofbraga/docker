@@ -1,5 +1,5 @@
 # Use uma imagem base com PHP e Apache
-FROM php:apache
+FROM php:8.0-apache
 
 # Atualize a lista de pacotes e instale extensões do PHP e ferramentas conforme necessário
 RUN apt-get update && \
