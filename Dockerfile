@@ -15,7 +15,7 @@ RUN apt-get update && \
         git \
         nano \  
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd zip pdo_mysql mysqli mbstring xml curl
+    && docker-php-ext-install -j$(nproc) xml gd zip pdo_mysql mysqli mbstring curl dom exif pcntl bcmath sockets
 
 # Limpeza do cache após a instalação de pacotes
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
