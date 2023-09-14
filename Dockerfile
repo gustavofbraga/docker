@@ -32,14 +32,27 @@ RUN pecl install -o -f redis \
     && rm -rf /tmp/pear \
     && docker-php-ext-enable redis
 
+COPY apache-conf/php.ini /usr/local/etc/php
+
 # Instale o Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Copie seu arquivo de configuração do Xdebug para dentro do contêiner
-COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+COPY xdebug.ini /usr/local/etc/php/conf.d
 
 # Copie seus arquivos PHP para o diretório padrão do Apache
 COPY ./ /var/www/html/
+
+# Copie as configurações do Apache
+COPY apache-conf/. /etc/apache2/
+
+# Habilite o site "laravel10" no Apache
+RUN a2ensite laravel10
+
+# Habilite o módulo de reescrita do Apache
+RUN a2enmod rewrite
+
+RUN service apache2 restart
 
 # Exponha a porta 80 (a porta padrão do Apache)
 EXPOSE 80
