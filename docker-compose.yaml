@@ -7,20 +7,22 @@ services:
       - "8080:80"  # Mapeia a porta 80 do contêiner para a porta 8080 do host
     volumes:
       - ./:/var/www/html  # Mapeia o diretório do seu projeto para o diretório do Apache
+    depends_on:
+      - redis
     restart: always
 
   mysql:
     image: mysql:latest
-    restart: always
+    restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD_ROOT}
       MYSQL_PASSWORD: ${DB_PASSWORD}
-    ports: 
-            - 3308:3306
+      MYSQL_USER: ${DB_USERNAME}
+    ports:
+    - "3307:3306" # Porta do contêiner 3307 MySQL : Porta do host 3306
     volumes:
-      - ./.docker/mysql:/var/lib/mysql  # Adicione um volume para armazenar os dados do MySQL  
+      - ./.docker/mysql:/var/lib/mysql  # Adicione um volume para armazenar os dados do MySQL
 
   redis:
     image: redis:latest
