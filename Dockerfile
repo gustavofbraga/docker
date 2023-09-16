@@ -1,6 +1,10 @@
 # Use uma imagem base com PHP e Apache
 FROM php:apache
 
+# Arguments defined in docker-compose.yml
+ARG user
+ARG uid
+
 # Atualize a lista de pacotes e instale extensões do PHP e ferramentas conforme necessário
 RUN apt-get update && \
     apt-get install -y \
@@ -37,11 +41,16 @@ COPY apache-conf/php.ini /usr/local/etc/php
 # Instale o Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Create system user to run Composer and Artisan Commands
+RUN useradd -G www-data,root -u $uid -d /home/$user $user
+RUN mkdir -p /home/$user/.composer && \
+    chown -R $user:$user /home/$user
+
 # Copie seu arquivo de configuração do Xdebug para dentro do contêiner
 COPY xdebug.ini /usr/local/etc/php/conf.d
 
 # Copie seus arquivos PHP para o diretório padrão do Apache
-COPY ./ /var/www/html/
+# COPY ./ /var/www/html/
 
 # Copie as configurações do Apache
 COPY apache-conf/. /etc/apache2/

@@ -2,6 +2,9 @@ version: '3.8'
 services:
   web:
     build:
+      args:
+        user: dockerUser
+        uid: 1000
       context: .  # Diretório onde está o seu Dockerfile
     ports:
       - "8080:80"  # Mapeia a porta 80 do contêiner para a porta 8080 do host
