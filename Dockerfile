@@ -1,7 +1,7 @@
 # Use uma imagem base com PHP e Apache
 FROM php:apache
 
-# Arguments defined in docker-compose.yml
+# Argumentos definidos no docker-compose.yml
 ARG user
 ARG uid
 
@@ -36,21 +36,19 @@ RUN pecl install -o -f redis \
     && rm -rf /tmp/pear \
     && docker-php-ext-enable redis
 
-COPY apache-conf/php.ini /usr/local/etc/php
-
 # Instale o Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Create system user to run Composer and Artisan Commands
+# Crie um usuário do sistema para executar comandos do Composer e Artisan
 RUN useradd -G www-data,root -u $uid -d /home/$user $user
 RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
 
+# Configure o PHP
+COPY apache-conf/php.ini /usr/local/etc/php
+
 # Copie seu arquivo de configuração do Xdebug para dentro do contêiner
 COPY xdebug.ini /usr/local/etc/php/conf.d
-
-# Copie seus arquivos PHP para o diretório padrão do Apache
-# COPY ./ /var/www/html/
 
 # Copie as configurações do Apache
 COPY apache-conf/. /etc/apache2/
@@ -61,6 +59,11 @@ RUN a2ensite laravel10
 # Habilite o módulo de reescrita do Apache
 RUN a2enmod rewrite
 
+# **Adicione o comando para configurar as permissões da pasta storage**
+RUN chown -R www-data:www-data /var/www/html/storage
+RUN chmod -R 775 /var/www/html/storage
+
+# Reinicie o serviço Apache
 RUN service apache2 restart
 
 # Exponha a porta 80 (a porta padrão do Apache)
