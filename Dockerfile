@@ -59,10 +59,6 @@ RUN a2ensite laravel10
 # Habilite o módulo de reescrita do Apache
 RUN a2enmod rewrite
 
-# **Adicione o comando para configurar as permissões da pasta storage**
-RUN chown -R www-data:www-data /var/www/html/storage
-RUN chmod -R 775 /var/www/html/storage
-
 # Reinicie o serviço Apache
 RUN service apache2 restart
 

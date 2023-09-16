@@ -18,10 +18,10 @@ services:
     image: mysql:latest
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: docker
-      MYSQL_USER: userdocker
-      MYSQL_PASSWORD: docker123      
-      MYSQL_ROOT_PASSWORD: docker123
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: userlaravel
+      MYSQL_PASSWORD: laravel123      
+      MYSQL_ROOT_PASSWORD: laravel123
     ports:
     - "3308:3306" # Porta do contêiner 3308 MySQL : Porta do host 3306
     volumes:
